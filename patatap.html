@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Patatap</title>
+  <link rel="stylesheet" href="patatap.css">
+  <script type="text/javascript" src="howler.js"></script>
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="paper-full.js"></script>
+  <script type="text/paperscript" canvas="circle">
+    var sound1 = new Howl({
+      src: ['sounds-a/bubbles.mp3']
+    });
+    var sound2 = new Howl({
+      src: ['sounds-a/clay.mp3']
+    });
+    var sound3 = new Howl({
+      src: ['sounds-a/confetti.mp3']
+    });
+    var sound4 = new Howl({
+      src: ['sounds-a/corona.mp3']
+    });
+    var sound5 = new Howl({
+      src: ['sounds-a/dotted-spiral.mp3']
+    });
+    var sound6 = new Howl({
+      src: ['sounds-a/squiggle.mp3']
+    });
+    var sound7 = new Howl({
+      src: ['sounds-a/timer.mp3']
+    });
+    var sound8 = new Howl({
+      src: ['sounds-a/ufo.mp3']
+    });
+    var circles=[];
+    var lines=[];
+    lines_fixed=[];
+    var square_zoom=[];
+    var hexagon_zoom=[];
+    //console.log(view.size.width + " " + view.size.height);
+    var getRandomPoint=function(){
+      var maxPoint=new Point(view.size.width,view.size.height);
+      var randomPoint=Point.random()*maxPoint;
+      return randomPoint
+    };
+    var getColor=function(){
+      var n1=Math.floor(Math.random() * (250 - 0 + 1));
+      var n2=Math.floor(Math.random() * (250 - 0 + 1));
+      var n3=Math.floor(Math.random() * (250 - 0 + 1));
+      return "rgb("+n1+","+n2+","+n3+")"
+    };
+    function onKeyDown(event){
+      console.log(event.key);
+      if(event.key==="space"){document.querySelector('body').style.backgroundColor=getColor();}
+      if(event.key=="a"||event.key=="n"||event.key=="y"||event.key=="s"){
+        sound1.play();
+        var circle1=new Path.Circle(getRandomPoint(),Math.random()*300);
+        var circle2=new Path.Circle(getRandomPoint(),Math.random()*300);
+        var circle3=new Path.Circle(getRandomPoint(),Math.random()*300);
+        circles.push(circle1);
+        circles.push(circle2);
+        circles.push(circle3);
+        for(var i=0;i<circles.length;i++){
+          circles[i].fillColor=getColor();
+        };
+      }//a key done
+
+      if(event.key=="j"){
+        sound2.play();
+        var y=10;
+        for(var x=1;x<=7;x++){
+          var line = new Path();
+          line.strokeColor = getColor();
+          line.strokeWidth = 15;
+          line.add(getRandomPoint(),getRandomPoint());
+          lines.push(line);
+        }
+      }
+
+      if(event.key=="g"){
+        sound3.play();
+        var y=Math.random()*1000;
+        var m=Math.random()*1000;
+        for(var x=1;x<=7;x++){
+          var line = new Path();
+          line.strokeColor = 'white';
+          line.strokeWidth = 15;
+          line.add( new Point(m,y),new Point(m+700,y) );
+          lines_fixed.push(line);
+          y+=30;
+        }
+      }
+
+      if(event.key=="c")
+      {
+        sound4.play();
+        var color="#efc2c4";
+        // Create a triangle shaped path
+        var f1=function(){var triangle = new Path.RegularPolygon(view.center, 3, 100);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f2=function(){var triangle = new Path.RegularPolygon(view.center, 4, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f3=function(){var triangle = new Path.RegularPolygon(view.center, 5, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f4=function(){var triangle = new Path.RegularPolygon(view.center, 6, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f5=function(){var triangle = new Path.RegularPolygon(view.center, 7, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f6=function(){var triangle = new Path.RegularPolygon(view.center, 8, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        var f7=function(){var triangle = new Path.RegularPolygon(view.center, 9, 200);
+          triangle.fillColor = color;
+          setTimeout(function(){triangle.remove()},50);
+        };
+        f1();
+        setTimeout(f2,100);
+        setTimeout(f3,200);
+        setTimeout(f4,300);
+        setTimeout(f5,400);
+        setTimeout(f6,500);
+        setTimeout(f7,600);
+
+      }
+
+      if(event.key=="o"||event.key=="w"||event.key=="b"||event.key=="h"||event.key=="z"){
+        sound5.play();
+        var myPath=new Path.Circle(view.center,300);
+        myPath.strokeColor = getColor();
+        myPath.strokeWidth = 5;
+        myPath.strokeCap = 'round';
+        myPath.dashArray = [10, 12];
+        myPath.rotate(30);
+        setTimeout(function(){myPath.remove()},1000);
+      }
+
+      if(event.key=="i"||event.key=="k"||event.key=="u"||event.key=="l"||event.key=="x"){
+        sound6.play();
+        var square = new Path.RegularPolygon(view.center, 4, 10);
+        square.strokeColor = getColor();
+        square.selected = true;
+        square.rotate(45);
+        square_zoom.push(square);
+        console.log(square.radius);
+        //myPath.rotate(30);
+      }
+
+      if(event.key=="f"||event.key=="v"||event.key=="d"||event.key=="r"||event.key=="e"){
+        sound7.play();
+        var square = new Path.RegularPolygon(view.center, 6, 300);
+        square.strokeColor = getColor();
+        square.strokeWidth=3;
+        square.selected = true;
+        for(var x=100;x<=3000;x+=100){
+        setTimeout(function(){square.rotate(10)},x);
+        };
+         setTimeout(function(){square.remove()},3100);
+      }
+
+
+      if(event.key=="m"||event.key=="p"||event.key=="q"){
+        sound8.play();
+        var square = new Path.RegularPolygon(view.center, 8, 10);
+        square.strokeColor = getColor();
+        square.selected = true;
+        square.rotate(45);
+        hexagon_zoom.push(square);
+      //  console.log(square.radius);
+    }
+
+
+    };
+    function onFrame(event) {
+
+      for(var i=0;i<square_zoom.length;i++){
+        square_zoom[i].scale(1.1);
+      };
+
+      for(var i=0;i<hexagon_zoom.length;i++){
+        hexagon_zoom[i].scale(1.09);
+      };
+
+      for(var i=0;i<circles.length;i++){
+        circles[i].fillColor.hue += 1;
+        circles[i].scale(.98);
+      };
+      for(var i=0;i<lines.length;i++){
+        lines[i].strokeColor.hue += 1;
+        lines[i].scale(.95);
+      };
+      for(var i=0;i<lines_fixed.length;i++){
+        lines_fixed[i].strokeColor.hue += 1;
+        lines_fixed[i].scale(.95);
+      };
+    }
+
+
+  </script>
+</head>
+<body>
+  <canvas id="circle" resize></canvas>
+</body>
+</html>
